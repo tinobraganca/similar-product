@@ -1,5 +1,7 @@
 package com.challenge.similar_product.controller.api;
 
+import com.challenge.similar_product.controller.exception.InternalServerErrorException;
+import com.challenge.similar_product.controller.exception.ProductNotFoundException;
 import com.challenge.similar_product.domain.ProductDetail;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -17,9 +19,9 @@ public interface SimilarProductApi {
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ProductDetail.class))),
             @ApiResponse(responseCode = "404", description = "Product not found",
-                    content = @Content(mediaType = "application/json")),
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ProductNotFoundException.class))),
             @ApiResponse(responseCode = "500", description = "Internal server error",
-                    content = @Content(mediaType = "application/json"))
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = InternalServerErrorException.class)))
     })
     List<ProductDetail> getSimilarProducts(String productId);
 }
