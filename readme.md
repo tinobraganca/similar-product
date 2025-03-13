@@ -1,33 +1,80 @@
-# Backend dev technical test
-We want to offer a new feature to our customers showing similar products to the one they are currently seeing. To do this we agreed with our front-end applications to create a new REST API operation that will provide them the product detail of the similar products for a given one. [Here](./similarProducts.yaml) is the contract we agreed.
-
-We already have an endpoint that provides the product Ids similar for a given one. We also have another endpoint that returns the product detail by product Id. [Here](./existingApis.yaml) is the documentation of the existing APIs.
-
-**Create a Spring boot application that exposes the agreed REST API on port 5000.**
 
 ![Diagram](./assets/diagram.jpg "Diagram")
 
-Note that _Test_ and _Mocks_ components are given, you must only implement _yourApp_.
+# Similar Products API - Spring Boot
 
-## Testing and Self-evaluation
-You can run the same test we will put through your application. You just need to have docker installed.
+##  Overview
 
-First of all, you may need to enable file sharing for the `shared` folder on your docker dashboard -> settings -> resources -> file sharing.
+This project is a **Spring Boot REST API** that finds similar products based on a given product ID. The implementation follows:
+ 
+- **Spring Boot with OpenAPI documentation**
+- **Feign Client to connect with external services**
+- **Metrics collection using Prometheus & Grafana**
+- **Automated tests**
 
-Then you can start the mocks and other needed infrastructure with the following command.
+##  Features
+
+- **Get similar products** using REST API (`GET /product/{productId}/similar`)
+- **Handles errors** for missing products and server issues
+- **OpenAPI documentation** with Swagger UI
+- **Uses Feign Client** to fetch product data
+- **Includes unit tests** for API and service
+- **Collects metrics with** Prometheus and sends them to Grafana
+
+## Automated Tests
+
+This project follows TDD principles and includes automated tests to ensure reliability and stability:
+
+- **Unit Tests**: Validates individual components using JUnit & Mockito.
+
+- **Controller Tests**: Uses MockMvc to simulate API requests and validate responses.
+
+- **Service Tests**: Ensures business logic correctness by mocking external dependencies.
+
+##  How to Run
+
+### 1️⃣ Run with Docker
+
+```sh
+docker-compose up --build
 ```
-docker-compose up -d simulado influxdb grafana
-```
-Check that mocks are working with a sample request to [http://localhost:3001/product/1/similarids](http://localhost:3001/product/1/similarids).
 
-To execute the test run:
-```
-docker-compose run --rm k6 run scripts/test.js
-```
-Browse [http://localhost:3000/d/Le2Ku9NMk/k6-performance-test](http://localhost:3000/d/Le2Ku9NMk/k6-performance-test) to view the results.
+### 2️⃣ API Documentation
 
-## Evaluation
-The following topics will be considered:
-- Code clarity and maintainability
-- Performance
-- Resilience
+Swagger UI: [http://localhost:5000/swagger-ui.html](http://localhost:5000/swagger-ui.html)
+
+##  API Endpoints
+
+### **1️⃣ Get Similar Products**
+
+**Endpoint:** `GET /product/{productId}/similar`
+
+| Response Code | Description              |
+| ------------- | ------------------------ |
+| 200           | Returns similar products |
+| 404           | Product not found        |
+| 500           | Internal server error    |
+
+### Metrics Monitoring with Prometheus & Grafana
+
+This project includes metrics collection using Micrometer & Prometheus, sending data to Grafana for visualization.
+
+- **Prometheus scrapes metrics from** http://localhost:5000/actuator/prometheus
+
+- **Grafana visualizes metrics from Prometheus**
+
+- **Dashboards include HTTP requests, CPU, memory, and JVM metrics**
+
+## ️Technologies Used
+- **Java 21**
+- **Spring Boot** (REST API)
+- **Feign Client** (External API calls)
+- **JUnit5 & Mockito** (Testing)
+- **OpenAPI/Swagger** (API Documentation)
+- **Docker & Docker Compose** (Containerization)
+- **Gradle** (Dependency Management)
+
+## 🔍 Important
+
+This project follows the same folder structure and Docker Compose setup as the base challenge. It is designed to run inside the same Docker network as the other services.
+❗ I don't know why, but on my PC, the configuration to use an external Docker network to merge with the existing Docker Compose setup was not working well. Because of this, I placed this service inside the same folder structure as the base Compose setup to ensure it runs within the correct network.

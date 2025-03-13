@@ -1,5 +1,21 @@
 version: "3.3"
 services:
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+  similar-product-service:
+    build: similar-product/
+    container_name: similar-product-service
+    ports:
+      - "5000:5000"
+    environment:
+      - SPRING_APPLICATION_JSON={"server.port":5000}
+    depends_on:
+      - simulado
   influxdb:
     image: influxdb:1.8.2
     ports:

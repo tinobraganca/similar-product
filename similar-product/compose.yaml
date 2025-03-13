@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  similar-product-service:
+    build: .
+    container_name: similar-product-service
+    ports:
+      - "5000:5000"
+    environment:
+      - SPRING_APPLICATION_JSON={"server.port":5000}
+    networks:
+      - backenddevtest_default
+networks:
+  backenddevtest_default:
+    external: true

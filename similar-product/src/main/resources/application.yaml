@@ -1,0 +1,26 @@
+spring:
+  logging:
+    pattern:
+      level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+  docker:
+    compose:
+      skip: true
+  application:
+    name: similarProduct
+server:
+  port: 5000
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, prometheus
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+  endpoint:
+    prometheus:
+      enabled: true
+feign-integration:
+  similar-api:
+    url: http://simulado:80
